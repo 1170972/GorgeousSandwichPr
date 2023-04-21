@@ -9,24 +9,22 @@ import pt.isep.arqsoft.GorgeousSandwich.repository.comment.mapper.CommentMapperJ
 @Service("CommentRepositoryWrapperJPA")
 public class CommentRepositoryWrapperJPA {
 
-	private CommentMapperJPA mapper;
 	private ICommentRepositoryJPA repository;
 
-	public CommentRepositoryWrapperJPA(CommentMapperJPA mapper, ICommentRepositoryJPA repository) {
-		this.mapper = mapper;
+	public CommentRepositoryWrapperJPA(ICommentRepositoryJPA repository) {
 		this.repository = repository;
 	}
 
 	public Comment save(Comment model) {
-		return this.mapper.convertToDomain(this.repository.save(mapper.convertToPersistence(model)));
+		return CommentMapperJPA.convertToDomain(this.repository.save(CommentMapperJPA.convertToPersistence(model)));
 	}
 
 	public List<Comment> findBySandwichId(Long sandwichId) {
-		return this.mapper.convertListToDomain(this.repository.findBySandwichId(sandwichId));
+		return CommentMapperJPA.convertListToDomain(this.repository.findBySandwichId(sandwichId));
 	}
 
 	public List<Comment> findByEmail(String email) {
-		return this.mapper.convertListToDomain(this.repository.findByEmail(email));
+		return CommentMapperJPA.convertListToDomain(this.repository.findByEmail(email));
 	}
 
 }

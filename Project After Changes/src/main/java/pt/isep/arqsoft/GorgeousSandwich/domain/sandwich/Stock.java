@@ -25,11 +25,13 @@ public class Stock implements IValueObject<Stock> {
 	
 	public Stock addUnits(int units) {
 		Validate.notNull(units, "Stock units must not be null.");
+		Validate.isTrue(units > 0, "Stock units to add must be superior than 0.");
 		return new Stock(this.units+units);
 	}
 	
 	public Stock removeUnits(int units) {
 		Validate.notNull(units, "Stock units must not be null.");
+		Validate.isTrue(units > 0, "Stock units to remove must be superior than 0.");
 		Validate.isTrue(this.units >= units,"Cant remove more units that those that exist");
 		return new Stock(this.units - units);
 	}

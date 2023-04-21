@@ -12,21 +12,18 @@ import pt.isep.arqsoft.GorgeousSandwich.repository.sandwich.mapper.SandwichMappe
 @Service("SandwichRepositoryWrapperJPA")
 public class SandwichRepositoryWrapperJPA {
 	
-	private SandwichMapperJPA mapper;
-	
 	private ISandwichRepositoryJPA repository;
 	
-	public SandwichRepositoryWrapperJPA(SandwichMapperJPA mapper, ISandwichRepositoryJPA repository) {
-		this.mapper = mapper;
+	public SandwichRepositoryWrapperJPA(ISandwichRepositoryJPA repository) {
 		this.repository = repository;
 	}
 
 	public Sandwich save(Sandwich model) {
-		return this.mapper.convertToDomain(this.repository.save(this.mapper.convertToPersistence(model)));
+		return SandwichMapperJPA.convertToDomain(this.repository.save(SandwichMapperJPA.convertToPersistence(model)));
 	}
 
 	public List<Sandwich> findAll() {
-		return this.mapper.convertListToDomain(this.repository.findAll());
+		return SandwichMapperJPA.convertListToDomain(this.repository.findAll());
 	}
 
 	public boolean checkIfExists(Long Id) {
@@ -34,15 +31,15 @@ public class SandwichRepositoryWrapperJPA {
 	}
 
 	public Sandwich getById(Long Id) {
-		return this.mapper.convertToDomain(this.repository.findById(Id).get());
+		return SandwichMapperJPA.convertToDomain(this.repository.findById(Id).get());
 	}
 
 	public Sandwich update(Sandwich model) {
-		return this.mapper.convertToDomain(this.repository.save(this.mapper.convertToPersistence(model)));
+		return SandwichMapperJPA.convertToDomain(this.repository.save(SandwichMapperJPA.convertToPersistence(model)));
 	}
 
 	public List<Sandwich> findByIds(Set<Long> sandwichIds) {
-		return this.mapper.convertListToDomain(this.repository.findAllById(sandwichIds));
+		return SandwichMapperJPA.convertListToDomain(this.repository.findAllById(sandwichIds));
 	}
 
 }

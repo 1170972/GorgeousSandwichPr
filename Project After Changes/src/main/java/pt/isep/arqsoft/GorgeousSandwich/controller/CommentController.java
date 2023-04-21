@@ -13,29 +13,27 @@ import java.util.List;
 @RequestMapping("/api/gorgeous-sandwich")
 public class CommentController {
     private CommentRepositoryWrapperJPA commentRepository;
-    private CommentConverter commentConverter;
 
-    public CommentController(CommentRepositoryWrapperJPA commentRepository,CommentConverter commentConverter){
+    public CommentController(CommentRepositoryWrapperJPA commentRepository){
         this.commentRepository = commentRepository;
-        this.commentConverter = commentConverter;
     }
 
     @GetMapping("/comments/sandwich/{id}")
     public List<CommentDTO> listBySandwich(@PathVariable(value = "id") Long sandwichId){
-        return commentConverter.convertCommentListToDTO(commentRepository.findBySandwichId(sandwichId));
+        return CommentConverter.convertCommentListToDTO(commentRepository.findBySandwichId(sandwichId));
     }
 
     @GetMapping("/comments/email/{id}")
     public List<CommentDTO> listByEmail(@PathVariable(value = "id") String email){
-        return commentConverter.convertCommentListToDTO(commentRepository.findByEmail(email));
+        return CommentConverter.convertCommentListToDTO(commentRepository.findByEmail(email));
     }
 
     @PostMapping("/comments")
     public CommentDTO createComment(@RequestBody CommentDTO commentDTO){
-        Comment comment = commentConverter.convertFromDTO(commentDTO);
+        Comment comment = CommentConverter.convertFromDTO(commentDTO);
         if(comment == null){
             throw new IllegalArgumentException("One or more of the input values are wrong");
         }
-        return commentConverter.convertToDTO(commentRepository.save(comment));
+        return CommentConverter.convertToDTO(commentRepository.save(comment));
     }
 }

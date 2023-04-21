@@ -14,33 +14,30 @@ import pt.isep.arqsoft.GorgeousSandwich.repository.order.mapper.OrderMapperJPA;
 @Service("OrderRepositoryWrapperJPA")
 public class OrderRepositoryWrapperJPA {
 
-	private OrderMapperJPA mapper;
-
 	private IOrderRepositoryJPA repository;
 	
-	public OrderRepositoryWrapperJPA(OrderMapperJPA mapper, IOrderRepositoryJPA repository) {
-		this.mapper = mapper;
+	public OrderRepositoryWrapperJPA(IOrderRepositoryJPA repository) {
 		this.repository = repository;
 	}
 
 	public Order save(Order model) {
-		return this.mapper.convertToDomain(this.repository.save(this.mapper.convertToPersistence(model)));
+		return OrderMapperJPA.convertToDomain(this.repository.save(OrderMapperJPA.convertToPersistence(model)));
 	}
 
 	public List<Order> findAll() {
-		return this.mapper.convertListToDomain(this.repository.findAll());
+		return OrderMapperJPA.convertListToDomain(this.repository.findAll());
 	}
 
 	public Order update(Order model) {
-		return this.mapper.convertToDomain(this.repository.save(this.mapper.convertToPersistence(model)));
+		return OrderMapperJPA.convertToDomain(this.repository.save(OrderMapperJPA.convertToPersistence(model)));
 	}
 
 	public Order getById(Long Id) {
-		return this.mapper.convertToDomain(this.repository.findById(Id).get());
+		return OrderMapperJPA.convertToDomain(this.repository.findById(Id).get());
 	}
 
 	public List<Order> getByEmail(String email) {
-		return this.mapper.convertListToDomain(this.repository.findByEmail(email));
+		return OrderMapperJPA.convertListToDomain(this.repository.findByEmail(email));
 	}
 
 }

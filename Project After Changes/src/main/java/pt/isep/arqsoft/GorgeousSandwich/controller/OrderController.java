@@ -30,24 +30,21 @@ public class OrderController {
     private OrderRepositoryWrapperJPA orderRepository;
     
     private SandwichRepositoryWrapperJPA sandwichRepository;
-    
-    private OrderConverter orderConverter;
 
-    public OrderController(OrderRepositoryWrapperJPA orderRepository, SandwichRepositoryWrapperJPA sandwichRepository, OrderConverter orderConverter){
+    public OrderController(OrderRepositoryWrapperJPA orderRepository, SandwichRepositoryWrapperJPA sandwichRepository){
     	this.orderRepository = orderRepository;
     	this.sandwichRepository = sandwichRepository;
-        this.orderConverter = orderConverter;
     }
 
     @GetMapping("/orders")
     public List<OrderDTO> listAll() {
-        return orderConverter.convertListToDTO(orderRepository.findAll());
+        return OrderConverter.convertListToDTO(orderRepository.findAll());
     }
 
     @GetMapping("/orders/{id}")
     public ResponseEntity<OrderDTO> getById(@PathVariable(value = "id") Long orderId) throws ResourceNotFoundException{
         try {
-            return ResponseEntity.ok().body(orderConverter.convertToDTO(orderRepository.getById(orderId)));
+            return ResponseEntity.ok().body(OrderConverter.convertToDTO(orderRepository.getById(orderId)));
         }catch (NoSuchElementException e){
             throw new ResourceNotFoundException("Sandwich not found with id " + orderId);
         }
@@ -55,7 +52,7 @@ public class OrderController {
 
     @GetMapping("/orders/email/{id}")
     public List<OrderDTO> getByEmail(@PathVariable(value = "id") String email) {
-        return orderConverter.convertListToDTO(orderRepository.getByEmail(email));
+        return OrderConverter.convertListToDTO(orderRepository.getByEmail(email));
     }
 
     @GetMapping("/orders/times")
@@ -68,7 +65,7 @@ public class OrderController {
         checkIfSandwichExists(orderDTO.orderItems);
         orderDTO.orderStatus = "Created";
         orderDTO.orderDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return orderConverter.convertToDTO(orderRepository.save(orderConverter.convertFromDTO(orderDTO)));
+        return OrderConverter.convertToDTO(orderRepository.save(OrderConverter.convertFromDTO(orderDTO)));
     }
 
     @PutMapping("/orders/{id}")
@@ -80,8 +77,8 @@ public class OrderController {
             }
             DeliveryTimeDTO deliveryTimeDTO = orderDTO.deliveryTime;
             order.changeDeliveryTime(deliveryTimeDTO.startTime, deliveryTimeDTO.endTime);
-            order.changeOrderItems(orderConverter.convertOrderItemsListFromDTO(orderDTO.orderItems));
-            return ResponseEntity.ok().body(this.orderConverter.convertToDTO(this.orderRepository.update(order)));
+            order.changeOrderItems(OrderConverter.convertOrderItemsListFromDTO(orderDTO.orderItems));
+            return ResponseEntity.ok().body(OrderConverter.convertToDTO(this.orderRepository.update(order)));
         }catch (NoSuchElementException e){
             throw new ResourceNotFoundException("Order not found with id"+orderId);
         }

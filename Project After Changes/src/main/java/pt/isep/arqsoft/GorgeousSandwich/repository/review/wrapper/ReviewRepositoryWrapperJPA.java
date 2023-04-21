@@ -10,25 +10,22 @@ import pt.isep.arqsoft.GorgeousSandwich.repository.review.mapper.ReviewMapperJPA
 @Service("ReviewRepositoryWrapperJPA")
 public class ReviewRepositoryWrapperJPA {
 	
-	private ReviewMapperJPA mapper;
-	
 	private IReviewRepositoryJPA repository;
 	
-	public ReviewRepositoryWrapperJPA(ReviewMapperJPA mapper, IReviewRepositoryJPA repository) {
-		this.mapper = mapper;
+	public ReviewRepositoryWrapperJPA(IReviewRepositoryJPA repository) {
 		this.repository = repository;
 	}
 
 	public Review save(Review model) {
-		return this.mapper.convertToDomain(this.repository.save(this.mapper.convertToPersistence(model)));
+		return ReviewMapperJPA.convertToDomain(this.repository.save(ReviewMapperJPA.convertToPersistence(model)));
 	}
 
 	public List<Review> findBySandwichId(Long sandwichId) {
-		return this.mapper.convertListToDomain(this.repository.findBySandwichId(sandwichId));
+		return ReviewMapperJPA.convertListToDomain(this.repository.findBySandwichId(sandwichId));
 	}
 
 	public List<Review> findByEmail(String email) {
-		return this.mapper.convertListToDomain(this.repository.findByEmail(email));
+		return ReviewMapperJPA.convertListToDomain(this.repository.findByEmail(email));
 	}
 
 }
